@@ -1,17 +1,13 @@
 <?php
 
 namespace App\Repositories;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class BookRepository {
+class JWTRepository {
 
     public function login(array $credentials){
         $res = null;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Repositories\JWTRepository;
+use Illuminate\Http\Request;
 
 class TokenController extends Controller
 {
