@@ -16,6 +16,11 @@ class CreateFindersTable extends Migration
         Schema::create('finders', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('keyword')->nullable();
+            $table->string('language')->nullable();
+            $table-> date('last_update')->nullable();
+            $table->enum('genre', ['FANTASY', 'ADVENTURE', 'THRILLER', 'ROMANCE', 'MYSTERY'])->nullable();
+
         });
     }
 

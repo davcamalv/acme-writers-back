@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReadersTable extends Migration
+class CreateBookReaderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateReadersTable extends Migration
      */
     public function up()
     {
-        Schema::create('readers', function (Blueprint $table) {
+        Schema::create('book_reader', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('finder_id')->constrained();
-
+            $table->bigInteger('book_id')->unsigned();
+            $table->foreign('book_id')->references('id')->on('books');
+            $table->bigInteger('reader_id')->unsigned();
+            $table->foreign('reader_id')->references('id')->on('readers');
         });
     }
 
@@ -28,6 +30,6 @@ class CreateReadersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('readers');
+        Schema::dropIfExists('book_reader');
     }
 }
