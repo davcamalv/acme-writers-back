@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/auth/login', 'TokenController@login');
 Route::post('/auth/refresh', 'TokenController@refreshToken');
-Route::get('/auth/expire', 'TokenController@expireToken');
+Route::get('/auth/logout', 'TokenController@logout');
 
 Route::group(['middleware' => ['jwt.auth']], function () {
 
