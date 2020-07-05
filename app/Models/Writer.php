@@ -10,11 +10,11 @@ class Writer extends Model
 
     public function creditCard()
     {
-        return $this->hasOne('App\CreditCard');
+        return $this->hasOne('App\Models\CreditCard');
     }
 
     public function user()
     {
-        return $this->morphOne('App\User', 'actor');
+        return $this->morphOne('App\Models\User', 'actor');
     }
 }

@@ -16,12 +16,12 @@ class CreateCreditCardsTable extends Migration
         Schema::create('credit_cards', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('holder')->required();
-            $table->string('make')->required();
-            $table->string('number')->required();
-            $table->integer('expiration_month')-> range(1, 12)->required();
-            $table->integer('expiration_year')-> min(0) ->required();
-            $table->integer('cvv')-> range(100, 999)->required();
+            $table->string('holder');
+            $table->string('make');
+            $table->string('number');
+            $table->integer('expiration_month');
+            $table->integer('expiration_year');
+            $table->integer('cvv');
 
 
         });
