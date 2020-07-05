@@ -19,3 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/auth/login', 'TokenController@login');
+Route::post('/auth/refresh', 'TokenController@refreshToken');
+Route::get('/auth/logout', 'TokenController@logout');
+
+Route::group(['middleware' => ['jwt.auth']], function () {
+
+});
