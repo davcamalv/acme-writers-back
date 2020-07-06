@@ -19,6 +19,8 @@ Route::post('/auth/login', 'TokenController@login');
 Route::post('/auth/refresh', 'TokenController@refreshToken');
 Route::get('/auth/logout', 'TokenController@logout');
 Route::post('/writer/register', 'WriterController@store');
+Route::post('/publisher/register', 'PublisherController@store');
+
 Route::group(['middleware' => ['jwt.auth']], function () {
 
 });

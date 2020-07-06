@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Dtos\RegisterWriterDto;
-use App\Http\Requests\RegisterWriterRequest;
 use App\Repositories\WriterRepository;
 use Illuminate\Http\Request;
 use App\Models\Writer;

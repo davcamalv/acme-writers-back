@@ -16,4 +16,9 @@ class CreditCard extends Model
     {
         return $this->hasOne('App\Models\Writer');
     }
+
+    public function publisher()
+    {
+        return $this->hasOne('App\Models\Publisher');
+    }
 }
