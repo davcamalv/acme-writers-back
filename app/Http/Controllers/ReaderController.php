@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Reader;
+use App\Repositories\ReaderRepository;
 use Illuminate\Http\Request;
+use App\Models\Reader;
 
 class ReaderController extends Controller
 {
+    protected $readerRepository;
+
+    public function __construct(ReaderRepository $readerRepo){
+        $this->readerRepository = $readerRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -35,13 +32,13 @@ class ReaderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return json_encode($this->readerRepository->save($request->all()));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Reader  $reader
+     * @param  \App\Models\Reader  $$reader
      * @return \Illuminate\Http\Response
      */
     public function show(Reader $reader)
@@ -50,21 +47,10 @@ class ReaderController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Reader  $reader
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Reader $reader)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Reader  $reader
+     * @param  \App\Models\Reader  $$reader
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Reader $reader)
@@ -75,7 +61,7 @@ class ReaderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Reader  $reader
+     * @param  \App\Models\Reader  $$reader
      * @return \Illuminate\Http\Response
      */
     public function destroy(Reader $reader)

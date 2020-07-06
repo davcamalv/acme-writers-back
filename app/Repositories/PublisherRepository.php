@@ -31,7 +31,7 @@ class PublisherRepository {
         $publisher->user()->save($user);
         $user->save();
 
-        return new RegisterPublisherDto($user->id, $user->name, $user->email, $user->address, $user->phone_number, $data['VAT'], $data['comercial_name'], $credit_card);
+        return new RegisterPublisherDto($user->id, $user->name, $user->email, $user->address, $user->phone_number, $publisher->VAT, $publisher->comercial_name, $credit_card);
     }
 
     private function validateDataToSave(array $data){
