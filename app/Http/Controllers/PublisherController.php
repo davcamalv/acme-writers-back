@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Publisher;
+use App\Repositories\PublisherRepository;
 use Illuminate\Http\Request;
+use App\Models\Publisher;
 
 class PublisherController extends Controller
 {
+    protected $publisherRepository;
+
+    public function __construct(PublisherRepository $publisherRepo){
+        $this->publisherRepository = $publisherRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -35,13 +32,13 @@ class PublisherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return json_encode($this->publisherRepository->save($request->all()));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Publisher  $publisher
+     * @param  \App\Models\Publisher  $$publisher
      * @return \Illuminate\Http\Response
      */
     public function show(Publisher $publisher)
@@ -50,21 +47,10 @@ class PublisherController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Publisher  $publisher
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Publisher $publisher)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Publisher  $publisher
+     * @param  \App\Models\Publisher  $$publisher
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Publisher $publisher)
@@ -75,7 +61,7 @@ class PublisherController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Publisher  $publisher
+     * @param  \App\Models\Publisher  $$publisher
      * @return \Illuminate\Http\Response
      */
     public function destroy(Publisher $publisher)
