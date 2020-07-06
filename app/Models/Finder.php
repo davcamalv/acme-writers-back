@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Finder extends Model
 {
-    protected $table = 'Finder';
+    protected $table = 'finders';
 
     protected $fillable = [
         'keyword', 'language', 'genre', 'last_update'];
@@ -16,4 +16,8 @@ class Finder extends Model
         return $this->belongsToMany('App\Models\Book');
     }
 
+    public function reader()
+    {
+        return $this->hasOne('App\Models\Reader');
+    }
 }

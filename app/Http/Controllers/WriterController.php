@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Writer;
+use App\Repositories\WriterRepository;
 use Illuminate\Http\Request;
+use App\Models\Writer;
 
 class WriterController extends Controller
 {
+    protected $writerRepository;
+
+    public function __construct(WriterRepository $writerRepo){
+        $this->writerRepository = $writerRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -35,13 +32,13 @@ class WriterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return json_encode($this->writerRepository->save($request->all()));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Writer  $writer
+     * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
     public function show(Writer $writer)
@@ -50,21 +47,10 @@ class WriterController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Writer  $writer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Writer $writer)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Writer  $writer
+     * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Writer $writer)
@@ -75,7 +61,7 @@ class WriterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Writer  $writer
+     * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
     public function destroy(Writer $writer)
