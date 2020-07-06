@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Dtos\RegisterWriterDto;
 use App\Models\CreditCard;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Writer;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -30,6 +31,8 @@ class WriterRepository {
         $writer->save();
         $writer->user()->save($user);
         $user->save();
+        $user->roles()->attach(Role::where('name', 'writer')->first());
+
         return new RegisterWriterDto($user->id, $user->name, $user->email, $user->address, $user->phone_number, $credit_card);
     }
 
