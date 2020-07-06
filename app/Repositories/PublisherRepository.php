@@ -6,6 +6,7 @@ use App\Dtos\RegisterPublisherDto;
 use App\Models\CreditCard;
 use App\Models\User;
 use App\Models\Publisher;
+use App\Models\Role;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,6 +31,7 @@ class PublisherRepository {
         $publisher->save();
         $publisher->user()->save($user);
         $user->save();
+        $user->roles()->attach(Role::where('name', 'publisher')->first());
 
         return new RegisterPublisherDto($user->id, $user->name, $user->email, $user->address, $user->phone_number, $publisher->VAT, $publisher->comercial_name, $credit_card);
     }

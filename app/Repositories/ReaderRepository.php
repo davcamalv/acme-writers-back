@@ -6,6 +6,7 @@ use App\Dtos\RegisterReaderDto;
 use App\Models\Finder;
 use App\Models\User;
 use App\Models\Reader;
+use App\Models\Role;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,6 +27,7 @@ class ReaderRepository {
         $reader->save();
         $reader->user()->save($user);
         $user->save();
+        $user->roles()->attach(Role::where('name', 'reader')->first());
 
         return new RegisterReaderDto($user->id, $user->name, $user->email, $user->address, $user->phone_number);
     }
