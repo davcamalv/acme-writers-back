@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Writer extends Model
 {
-    protected $table = 'Writer';
+    protected $table = 'writers';
 
     public function creditCard()
     {
-        return $this->hasOne('App\Models\CreditCard');
+        return $this->belongsTo('App\Models\CreditCard');
     }
 
     public function user()
