@@ -19,7 +19,7 @@ class Book extends Model
 
     public function publisher()
     {
-        return $this->hasOne('App\Models\Publisher');
+        return $this->belongsTo('App\Models\Publisher');
     }
 
     public function writer()
