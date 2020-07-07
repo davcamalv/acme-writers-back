@@ -20,4 +20,9 @@ class Publisher extends Model
     {
         return $this->morphOne('App\Models\User', 'actor');
     }
+
+    public function books()
+    {
+        return $this->hasMany('App\Models\Book');
+    }
 }
