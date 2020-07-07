@@ -20,7 +20,7 @@ class TickerRepository {
         $alfanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for ($i = 0; $i < 10; $i++) {
             $random_number = random_int(0, strlen($alfanumeric) - 1);
-            $identifier = $identifier . $alfanumeric{$random_number};
+            $identifier = $identifier . $alfanumeric[$random_number];
         }
         $ticker = new Ticker(['identifier' => $identifier]);
         $ticker->save();
