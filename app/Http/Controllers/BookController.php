@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
+use App\Repositories\BookRepository;
 use Illuminate\Http\Request;
+use App\Models\Book;
 
 class BookController extends Controller
 {
+    protected $bookRepository;
+
+    public function __construct(BookRepository $bookRepo){
+        $this->BookRepository = $bookRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -35,13 +32,14 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['writer']);
+        return json_encode($this->BookRepository->save($request->all()));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Book  $book
+     * @param  \App\Models\Book  $$book
      * @return \Illuminate\Http\Response
      */
     public function show(Book $book)
@@ -50,21 +48,10 @@ class BookController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Book $book)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Book  $book
+     * @param  \App\Models\Book  $$book
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Book $book)
@@ -75,7 +62,7 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Book  $book
+     * @param  \App\Models\Book  $$book
      * @return \Illuminate\Http\Response
      */
     public function destroy(Book $book)

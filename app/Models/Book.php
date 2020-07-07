@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
-    protected $table = 'Book';
+    protected $table = 'books';
 
     protected $fillable = [
         'title', 'description', 'language', 'genre', 'cover', 'cancelled', 'status', 'draft'
@@ -14,16 +14,16 @@ class Book extends Model
 
     public function ticker()
     {
-        return $this->hasOne('App\Models\Ticker');
+        return $this->belongsTo('App\Models\Ticker');
     }
 
     public function publisher()
     {
-        return $this->hasOne('App\Models\Publisher');
+        return $this->belongsTo('App\Models\Publisher');
     }
 
     public function writer()
     {
-        return $this->hasOne('App\Models\Writer');
+        return $this->belongsTo('App\Models\Writer');
     }
 }
