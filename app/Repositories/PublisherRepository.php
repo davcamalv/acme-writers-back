@@ -25,8 +25,9 @@ class PublisherRepository {
     public function save(array $data){
         $this->validateDataToSave($data);
         $credit_card = $this->creditCardRepository->save($data['credit_card']);
-        $user = new User(['name'=>$data['name'], 'email'=>$data['email'], 'password'=>bcrypt($data['password']), 'address'=>$data['address'], 'phone_number'=>$data['phone_number']]);
-        $publisher = new Publisher(['VAT'=>$data['VAT'], 'comercial_name'=>$data['comercial_name']]);
+        $user = new User($data);
+        $user -> setAttribute('password', bcrypt($data['password']));
+        $publisher = new Publisher($data);
         CreditCard::find($credit_card->getId())->publisher()->save($publisher);
         $publisher->save();
         $publisher->user()->save($user);

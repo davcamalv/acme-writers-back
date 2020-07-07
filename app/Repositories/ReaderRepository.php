@@ -19,7 +19,8 @@ class ReaderRepository {
 
     public function save(array $data){
         $this->validateDataToSave($data);
-        $user = new User(['name'=>$data['name'], 'email'=>$data['email'], 'password'=>bcrypt($data['password']), 'address'=>$data['address'], 'phone_number'=>$data['phone_number']]);
+        $user = new User($data);
+        $user -> setAttribute('password', bcrypt($data['password']));
         $reader = new Reader();
         $finder = new Finder();
         $finder->save();

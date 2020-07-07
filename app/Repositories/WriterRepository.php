@@ -25,7 +25,8 @@ class WriterRepository {
     public function save(array $data){
         $this->validateDataToSave($data);
         $credit_card = $this->creditCardRepository->save($data['credit_card']);
-        $user = new User(['name'=>$data['name'], 'email'=>$data['email'], 'password'=>bcrypt($data['password']), 'address'=>$data['address'], 'phone_number'=>$data['phone_number']]);
+        $user = new User($data);
+        $user -> setAttribute('password', bcrypt($data['password']));
         $writer = new Writer();
         CreditCard::find($credit_card->getId())->writer()->save($writer);
         $writer->save();
