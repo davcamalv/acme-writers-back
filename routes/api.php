@@ -23,5 +23,5 @@ Route::post('/publisher/register', 'PublisherController@store');
 Route::post('/reader/register', 'ReaderController@store');
 
 Route::group(['middleware' => ['jwt.auth']], function () {
-
+    Route::post('/book/create', 'BookController@store');
 });
