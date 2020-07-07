@@ -45,11 +45,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', 'db4free.net'),
+            'host' => env('DB_HOST', 'qf5dic2wzyjf1x5x.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'acmewritersback'),
-            'username' => env('DB_USERNAME', 'davcamalv'),
-            'password' => env('DB_PASSWORD', 'davcamalv'),
+            'database' => env('DB_DATABASE', 'tlmtiyono4znl2jr'),
+            'username' => env('DB_USERNAME', 'xpgzzmbaskhzylry'),
+            'password' => env('DB_PASSWORD', 'p6yt25n6lgtgds14'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
