@@ -4,7 +4,7 @@ namespace App\Dtos;
 
 final class RegisterReaderDto{
 
-    public function __construct(int $id_user, string $name, string $email, string $address, string $phone_number)
+    public function __construct(?int $id_user, ?string $name, ?string $email, ?string $address, ?string $phone_number)
     {
         $this->id_user = $id_user;
         $this->name = $name;

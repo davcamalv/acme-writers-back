@@ -4,7 +4,7 @@ namespace App\Dtos;
 
 final class RegisterPublisherDto{
 
-    public function __construct(int $id_user, string $name, string $email, string $address, string $phone_number, string $VAT, string $comercial_name, CreditCardDto $credit_card)
+    public function __construct(?int $id_user, ?string $name, ?string $email, ?string $address, ?string $phone_number, ?string $VAT, ?string $comercial_name, ?CreditCardDto $credit_card)
     {
         $this->id_user = $id_user;
         $this->name = $name;

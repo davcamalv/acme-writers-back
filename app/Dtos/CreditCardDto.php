@@ -4,7 +4,7 @@ namespace App\Dtos;
 
 final class CreditCardDto{
 
-    public function __construct(int $id, string $holder, string $make, string $number, int $expiration_month, int $expiration_year, int $cvv)
+    public function __construct(?int $id, ?string $holder, ?string $make, ?string $number, ?int $expiration_month, ?int $expiration_year, ?int $cvv)
     {
         $this->id = $id;
         $this->holder = $holder;
