@@ -19,4 +19,9 @@ class ChapterController extends Controller
         return json_encode($this->chapterRepository->save($request->all()));
     }
 
+    public function show(int $chapter_id)
+    {
+        return json_encode($this->chapterRepository->findOne($chapter_id));
+    }
+
 }

@@ -23,6 +23,22 @@ class ChapterRepository {
         return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, $book->id);
     }
 
+    public function findOne(int $chapter_id){
+        $this->validateChapter($chapter_id);
+        $chapter = Chapter::find($chapter_id);
+        $book = $chapter->book;
+        $this->validateBookToShow($book);
+        return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, $book->id);
+
+    }
+
+    private function validateBookToShow(Book $book){
+        if(($book->draft) && ($book->writer != auth()->user()->actor)) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'You do not have permission to access the requested book'], 401));
+        }
+    }
+
     private function validateDataToSave(array $data){
         $validator = Validator::make($data, ['title'=>'required', 'number' => 'required|numeric', 'text' => 'required', 'book_id'=> 'required']);
 
@@ -36,6 +52,13 @@ class ChapterRepository {
         if (!(Book::where('id', $book_id)->exists())){
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'The book does not exist in the database'], 404));
+        }
+    }
+
+    private function validateChapter(int $chapter_id){
+        if (!(Chapter::where('id', $chapter_id)->exists())){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The chapter does not exist in the database'], 404));
         }
     }
 
