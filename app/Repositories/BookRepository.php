@@ -41,6 +41,7 @@ class BookRepository {
     public function findOne(int $book_id){
         $this->validateBook($book_id);
         $book = Book::find($book_id);
+        $this->validateBookToShow($book);
         $publisher = $book->publisher;
         $publisher_id = null;
         if($publisher != null){
@@ -74,12 +75,29 @@ class BookRepository {
     }
 
     public function delete(int $book_id){
-        $this->validateDelete($book_id);
+        $this->validateBook($book_id);
         $book = Book::find($book_id);
+        $this->validateBookToDelete($book);
         Chapter::where('book_id', $book->id)->delete();
         $ticker = $book->ticker();
         $book->delete();
         $ticker->delete();
+    }
+
+    public function changeDraft(int $book_id){
+        $this->validateBook($book_id);
+        $book = Book::find($book_id);
+        $this->validateBookToChangeDraft($book);
+        $book->setAttribute('draft', 0);
+        $book->save();
+        $publisher = $book->publisher;
+        $publisher_id = null;
+        if($publisher != null){
+            $publisher_id = $publisher->id;
+        }
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
+        $publisher_id,
+        $book->writer->id);
     }
 
     private function validateDataToSave(array $data){
@@ -108,28 +126,34 @@ class BookRepository {
         if (!(Book::where('id', $book_id)->exists())){
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'The book does not exist in the database'], 404));
-        }else{
-            $book = Book::find($book_id);
-            if(($book->draft) && ($book->writer != auth()->user()->actor)) {
-                throw new HttpResponseException(response()->json(['success' => false,
-                'message' => 'You do not have permission to access the requested book'], 401));
-         }
         }
     }
 
-    private function validateDelete(int $book_id){
-        if (!(Book::where('id', $book_id)->exists())){
+    private function validateBookToShow(Book $book){
+        if(($book->draft) && ($book->writer != auth()->user()->actor)) {
             throw new HttpResponseException(response()->json(['success' => false,
-            'message' => 'The book does not exist in the database'], 404));
-        }else{
-            $book = Book::find($book_id);
-            if($book->writer != auth()->user()->actor) {
-                throw new HttpResponseException(response()->json(['success' => false,
-                'message' => 'You do not have permission to delete the requested book'], 401));
-            }if(!$book->draft){
-                throw new HttpResponseException(response()->json(['success' => false,
-                'message' => 'The book you want to delete is not in draft mode'], 401));
-            }
+            'message' => 'You do not have permission to access the requested book'], 401));
         }
     }
+
+    private function validateBookToDelete(Book $book){
+        if($book->writer != auth()->user()->actor) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'You do not have permission to delete the requested book'], 401));
+        }if(!$book->draft){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The book you want to delete is not in draft mode'], 401));
+        }
+    }
+
+    private function validateBookToChangeDraft(Book $book){
+        if($book->writer != auth()->user()->actor) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'You do not have permission to edit the requested book'], 401));
+        }if(!$book->draft){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The requested book is in final mode'], 401));
+        }
+    }
+
 }
