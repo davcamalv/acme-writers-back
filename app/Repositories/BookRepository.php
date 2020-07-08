@@ -6,9 +6,6 @@ use App\Dtos\BookDto;
 use App\Models\Book;
 use App\Models\Chapter;
 use App\Models\User;
-use App\Models\Opinion;
-use App\Models\Ticker;
-use App\Models\Writer;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 
@@ -52,6 +49,28 @@ class BookRepository {
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id,
         $book->writer->id);
+    }
+
+    public function listMyBooks(){
+        $list_of_books = [];
+        $user = User::find(auth()->id());
+        if($user->hasRole('writer')){
+            $books = Book::where('writer_id', $user->actor->id)->get();
+        }elseif($user->hasRole('publisher')){
+            $books = Book::where('publisher_id', $user->actor->id)->where('draft', 0)->get();
+        }else{
+            $books = Book::where('reader_id', $user->actor->id)->where('draft', 0)->get();
+        }
+        foreach($books as $book){
+            $publisher = $book->publisher;
+            $publisher_id = null;
+            if($publisher != null){
+                $publisher_id = $publisher->id;
+            }
+            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->id);
+            array_push($list_of_books, $book_dto);
+        }
+        return $list_of_books;
     }
 
     public function delete(int $book_id){
