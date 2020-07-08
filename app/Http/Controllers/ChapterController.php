@@ -2,84 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Chapter;
+use App\Repositories\ChapterRepository;
 use Illuminate\Http\Request;
 
 class ChapterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    protected $chapterRepository;
+
+    public function __construct(ChapterRepository $chapterRepo){
+        $this->chapterRepository = $chapterRepo;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['writer']);
+        return json_encode($this->chapterRepository->save($request->all()));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Chapter  $chapter
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Chapter $chapter)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Chapter  $chapter
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Chapter $chapter)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Chapter  $chapter
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Chapter $chapter)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Chapter  $chapter
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Chapter $chapter)
-    {
-        //
-    }
 }
