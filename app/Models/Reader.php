@@ -27,7 +27,7 @@ class Reader extends Model
 
     public function opinions()
     {
-        return $this->belongsToMany('App\Models\Opinion');
+        return $this->hasMany('App\Models\Opinion');
     }
 
 }

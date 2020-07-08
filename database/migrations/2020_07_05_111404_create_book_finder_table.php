@@ -17,9 +17,9 @@ class CreateBookFinderTable extends Migration
             $table->id();
             $table->timestamps();
             $table->bigInteger('book_id')->unsigned();
-            $table->foreign('book_id')->references('id')->on('books');
+            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->bigInteger('finder_id')->unsigned();
-            $table->foreign('finder_id')->references('id')->on('finders');
+            $table->foreign('finder_id')->references('id')->on('finders')->onDelete('cascade');
         });
     }
 

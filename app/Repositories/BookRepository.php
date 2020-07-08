@@ -4,7 +4,10 @@ namespace App\Repositories;
 
 use App\Dtos\BookDto;
 use App\Models\Book;
+use App\Models\Chapter;
 use App\Models\User;
+use App\Models\Opinion;
+use App\Models\Ticker;
 use App\Models\Writer;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
@@ -49,7 +52,15 @@ class BookRepository {
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id,
         $book->writer->id);
+    }
 
+    public function delete(int $book_id){
+        $this->validateDelete($book_id);
+        $book = Book::find($book_id);
+        Chapter::where('book_id', $book->id)->delete();
+        $ticker = $book->ticker();
+        $book->delete();
+        $ticker->delete();
     }
 
     private function validateDataToSave(array $data){
@@ -84,6 +95,22 @@ class BookRepository {
                 throw new HttpResponseException(response()->json(['success' => false,
                 'message' => 'You do not have permission to access the requested book'], 401));
          }
+        }
+    }
+
+    private function validateDelete(int $book_id){
+        if (!(Book::where('id', $book_id)->exists())){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The book does not exist in the database'], 404));
+        }else{
+            $book = Book::find($book_id);
+            if($book->writer != auth()->user()->actor) {
+                throw new HttpResponseException(response()->json(['success' => false,
+                'message' => 'You do not have permission to delete the requested book'], 401));
+            }if(!$book->draft){
+                throw new HttpResponseException(response()->json(['success' => false,
+                'message' => 'The book you want to delete is not in draft mode'], 401));
+            }
         }
     }
 }

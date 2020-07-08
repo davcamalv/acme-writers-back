@@ -65,8 +65,9 @@ class BookController extends Controller
      * @param  \App\Models\Book  $$book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Book $book)
+    public function destroy(int $book_id, Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['writer']);
+        $this->BookRepository->delete($book_id);
     }
 }

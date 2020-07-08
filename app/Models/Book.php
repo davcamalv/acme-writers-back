@@ -29,6 +29,21 @@ class Book extends Model
 
     public function opinions()
     {
-        return $this->belongsToMany('App\Models\Opinion');
+        return $this->hasMany('App\Models\Opinion');
+    }
+
+    public function finders()
+    {
+        return $this->hasMany('App\Models\Finder');
+    }
+
+    public function chapters()
+    {
+        return $this->hasMany('App\Models\Chapter');
+    }
+
+    public function readers()
+    {
+        return $this->hasMany('App\Models\Reader');
     }
 }
