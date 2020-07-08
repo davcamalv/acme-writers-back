@@ -29,4 +29,10 @@ class ChapterController extends Controller
         return json_encode($this->chapterRepository->listChaptersOfBook($book_id));
     }
 
+    public function update(Request $request)
+    {
+        $request->user()->authorizeRoles(['writer']);
+        return json_encode($this->chapterRepository->update($request->all()));
+    }
+
 }

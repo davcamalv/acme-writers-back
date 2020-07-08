@@ -45,6 +45,33 @@ class ChapterRepository {
         return $list_of_chapters;
     }
 
+    public function update(array $data){
+        $this->validateDataToUpdate($data);
+        $this->validateChapter($data['chapter_id']);
+        $chapter = Chapter::find($data['chapter_id']);
+        $this->validateChapterToUpdate($chapter);
+        $chapter->fill(['title'=>$data['title'], 'text'=>$data['text'], 'number'=>$data['number']]);
+        $chapter->save();
+        return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, $chapter->book->id);
+
+    }
+
+    private function validateChapterToUpdate(Chapter $chapter){
+        if($chapter->book->writer != auth()->user()->actor) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'You do not have permission to edit the requested chapter'], 401));
+        }
+    }
+
+    private function validateDataToUpdate(array $data){
+        $validator = Validator::make($data, ['chapter_id'=>'required|numeric', 'title'=>'required', 'number' => 'required|numeric', 'text' => 'required']);
+
+        if ($validator->fails()) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'Wrong validation', 'errors' => $validator->errors()], 422));
+        }
+    }
+
     private function validateBookToShow(Book $book){
         if(($book->draft) && ($book->writer != auth()->user()->actor)) {
             throw new HttpResponseException(response()->json(['success' => false,
