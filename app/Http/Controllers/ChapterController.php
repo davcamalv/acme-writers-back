@@ -24,4 +24,9 @@ class ChapterController extends Controller
         return json_encode($this->chapterRepository->findOne($chapter_id));
     }
 
+    public function listChaptersOfBook(int $book_id)
+    {
+        return json_encode($this->chapterRepository->listChaptersOfBook($book_id));
+    }
+
 }

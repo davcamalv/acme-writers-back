@@ -32,6 +32,19 @@ class ChapterRepository {
 
     }
 
+    public function listChaptersOfBook(int $book_id){
+        $this->validateBook($book_id);
+        $book = Book::find($book_id);
+        $this->validateBookToShow($book);
+        $list_of_chapters = [];
+        $chapters = $book->chapters;
+        foreach($chapters as $chapter){
+            $chapter_dto = new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, $chapter->book->id);
+            array_push($list_of_chapters, $chapter_dto);
+        }
+        return $list_of_chapters;
+    }
+
     private function validateBookToShow(Book $book){
         if(($book->draft) && ($book->writer != auth()->user()->actor)) {
             throw new HttpResponseException(response()->json(['success' => false,
