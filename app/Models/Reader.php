@@ -25,4 +25,9 @@ class Reader extends Model
         return $this->morphOne('App\Models\User', 'actor');
     }
 
+    public function opinions()
+    {
+        return $this->belongsToMany('App\Models\Opinion');
+    }
+
 }

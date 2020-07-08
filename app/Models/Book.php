@@ -26,4 +26,9 @@ class Book extends Model
     {
         return $this->belongsTo('App\Models\Writer');
     }
+
+    public function opinions()
+    {
+        return $this->belongsToMany('App\Models\Opinion');
+    }
 }
