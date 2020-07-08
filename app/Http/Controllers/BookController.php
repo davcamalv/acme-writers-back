@@ -35,6 +35,12 @@ class BookController extends Controller
         return json_encode($this->bookRepository->update($request->all()));
     }
 
+    public function changeStatus(Request $request)
+    {
+        $request->user()->authorizeRoles(['publisher']);
+        return json_encode($this->bookRepository->changeStatus($request->all()));
+    }
+
     public function changeDraft(int $book_id)
     {
         return json_encode($this->bookRepository->changeDraft($book_id));

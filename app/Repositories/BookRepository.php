@@ -109,6 +109,23 @@ class BookRepository {
         $book->writer->user->id);
     }
 
+    public function changeStatus(array $data){
+        $this->validateDataToChangeStatus($data);
+        $this->validateBook($data['book_id']);
+        $book = Book::find($data['book_id']);
+        $this->validateBookToChangeStatus($book);
+        $book->setAttribute('status', $data["status"]);
+        $book->save();
+        $publisher = $book->publisher;
+        $publisher_id = null;
+        if($publisher != null){
+            $publisher_id = $publisher->user()->id;
+        }
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
+        $publisher_id,
+        $book->writer->user->id);
+    }
+
     public function update(array $data){
         $this->validateDataToUpdate($data);
         $this->validateBook($data['book_id']);
@@ -134,6 +151,15 @@ class BookRepository {
 
     private function validateDataToSave(array $data){
         $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,ADVENTURE,THRILLER,ROMANCE,MYSTERY']);
+
+        if ($validator->fails()) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'Wrong validation', 'errors' => $validator->errors()], 422));
+        }
+    }
+
+    private function validateDataToChangeStatus(array $data){
+        $validator = Validator::make($data, ['status' => 'required|in:REJECTED,ACCEPTED', 'book_id'=> 'required|numeric']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,
@@ -204,6 +230,19 @@ class BookRepository {
         }if(!$book->draft){
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'The requested book is in final mode'], 401));
+        }
+    }
+
+    private function validateBookToChangeStatus(Book $book){
+        if($book->publisher != auth()->user()->actor) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'You do not have permission to change status of the requested book'], 401));
+        }if($book->draft){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The requested book is in draft mode'], 401));
+        }if($book->status != 'PENDING'){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The book must be pending to change status'], 401));
         }
     }
 
