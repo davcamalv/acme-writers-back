@@ -20,7 +20,6 @@ class CreateBooksTable extends Migration
             $table->string('description');
             $table->enum('language',['EN', 'ES', 'IT', 'FR', 'DE', 'OTHER']);
             $table->string('cover')->nullable();
-            $table->boolean('cancelled');
             $table->enum('status', ['INDEPENDENT', 'PENDING', 'REJECTED', 'ACCEPTED']);
             $table->boolean('draft');
             $table->foreignId('ticker_id')->constrained();

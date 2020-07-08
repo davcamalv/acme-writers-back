@@ -42,9 +42,9 @@ class BookController extends Controller
      * @param  \App\Models\Book  $$book
      * @return \Illuminate\Http\Response
      */
-    public function show(Book $book)
+    public function show(int $book_id)
     {
-        //
+        return json_encode($this->BookRepository->findOne($book_id));
     }
 
     /**

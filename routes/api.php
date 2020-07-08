@@ -18,10 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/login', 'TokenController@login');
 Route::post('/auth/refresh', 'TokenController@refreshToken');
 Route::get('/auth/logout', 'TokenController@logout');
-Route::post('/writer/register', 'WriterController@store');
-Route::post('/publisher/register', 'PublisherController@store');
-Route::post('/reader/register', 'ReaderController@store');
+Route::post('/writer', 'WriterController@store');
+Route::post('/publisher', 'PublisherController@store');
+Route::post('/reader', 'ReaderController@store');
 
 Route::group(['middleware' => ['jwt.auth']], function () {
-    Route::post('/book/create', 'BookController@store');
+    Route::post('/book', 'BookController@store');
+    Route::get('/book/{book_id}', 'BookController@show');
+
 });

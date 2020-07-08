@@ -9,7 +9,7 @@ class Book extends Model
     protected $table = 'books';
 
     protected $fillable = [
-        'title', 'description', 'language', 'genre', 'cover', 'cancelled', 'status', 'draft'
+        'title', 'description', 'language', 'genre', 'cover', 'status', 'draft'
     ];
 
     public function ticker()
