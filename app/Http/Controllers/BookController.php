@@ -30,9 +30,10 @@ class BookController extends Controller
         return json_encode($this->BookRepository->findOne($book_id));
     }
 
-    public function update(Request $request, Book $book)
+    public function update(Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['writer']);
+        return json_encode($this->BookRepository->update($request->all()));
     }
 
     public function changeDraft(int $book_id)

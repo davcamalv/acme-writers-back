@@ -35,7 +35,14 @@ class BookRepository {
 
         $writer = auth()->user()->actor;
         $writer->books()->save($book);
-        return $book;
+        $publisher = $book->publisher;
+        $publisher_id = null;
+        if($publisher != null){
+            $publisher_id = $publisher->user()->id;
+        }
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
+        $publisher_id,
+        $book->writer->user->id);
     }
 
     public function findOne(int $book_id){
@@ -45,11 +52,12 @@ class BookRepository {
         $publisher = $book->publisher;
         $publisher_id = null;
         if($publisher != null){
-            $publisher_id = $publisher->id;
+            $publisher_id = $publisher->user()->id;
+
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id,
-        $book->writer->id);
+        $book->writer->user->id);
     }
 
     public function listMyBooks(){
@@ -66,9 +74,10 @@ class BookRepository {
             $publisher = $book->publisher;
             $publisher_id = null;
             if($publisher != null){
-                $publisher_id = $publisher->id;
+                $publisher_id = $publisher->user()->id;
+
             }
-            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->id);
+            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id);
             array_push($list_of_books, $book_dto);
         }
         return $list_of_books;
@@ -93,15 +102,48 @@ class BookRepository {
         $publisher = $book->publisher;
         $publisher_id = null;
         if($publisher != null){
-            $publisher_id = $publisher->id;
+            $publisher_id = $publisher->user()->id;
+
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id,
-        $book->writer->id);
+        $book->writer->user->id);
+    }
+
+    public function update(array $data){
+        $this->validateDataToUpdate($data);
+        $this->validateBook($data['book_id']);
+        $book = Book::find($data['book_id']);
+        $this->validateBookToUpdate($book);
+        if(array_key_exists('publisher_id', $data)){
+            $this->validatePublisher($data['publisher_id']);
+            $book->setAttribute('status', 'PENDING');
+            $book->setAttribute('publisher_id', User::find($data['publisher_id'])->actor->id);
+        }else{
+            $book->setAttribute('status', 'INDEPENDENT');
+        }
+        $book->fill(['title'=>$data['title'], 'description'=>$data['description'], 'language'=>$data['language'], 'cover'=>$data['cover'], 'genre'=>$data['genre']]);
+        $book->save();
+        $publisher = $book->publisher;
+        $publisher_id = null;
+        if($publisher != null){
+            $publisher_id = $publisher->user->id;
+        }
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
+        $publisher_id, $book->writer->user->id);
     }
 
     private function validateDataToSave(array $data){
-        $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required', 'cover'=> 'url', 'genre' => 'required']);
+        $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,ADVENTURE,THRILLER,ROMANCE,MYSTERY']);
+
+        if ($validator->fails()) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'Wrong validation', 'errors' => $validator->errors()], 422));
+        }
+    }
+
+    private function validateDataToUpdate(array $data){
+        $validator = Validator::make($data, ['book_id'=>'required|numeric', 'title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,ADVENTURE,THRILLER,ROMANCE,MYSTERY']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,
@@ -146,6 +188,12 @@ class BookRepository {
         }
     }
 
+    private function validateBookToUpdate(Book $book){
+        if($book->writer != auth()->user()->actor) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'You do not have permission to edit the requested book'], 401));
+        }
+    }
     private function validateBookToChangeDraft(Book $book){
         if($book->writer != auth()->user()->actor) {
             throw new HttpResponseException(response()->json(['success' => false,
