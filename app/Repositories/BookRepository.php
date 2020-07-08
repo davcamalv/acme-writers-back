@@ -103,7 +103,6 @@ class BookRepository {
         $publisher_id = null;
         if($publisher != null){
             $publisher_id = $publisher->user()->id;
-
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id,
@@ -192,8 +191,12 @@ class BookRepository {
         if($book->writer != auth()->user()->actor) {
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'You do not have permission to edit the requested book'], 401));
+        }if(!$book->draft){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The requested book is in final mode'], 401));
         }
     }
+
     private function validateBookToChangeDraft(Book $book){
         if($book->writer != auth()->user()->actor) {
             throw new HttpResponseException(response()->json(['success' => false,
