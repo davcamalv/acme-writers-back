@@ -191,6 +191,9 @@ class BookRepository {
         if($book->writer != auth()->user()->actor) {
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'You do not have permission to edit the requested book'], 401));
+        }if(!$book->draft){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The requested book is in final mode'], 401));
         }
     }
 

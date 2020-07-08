@@ -32,4 +32,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('/chapter/{book_id}', 'ChapterController@store');
     Route::get('/chapter/chapters-of-book/{book_id}', 'ChapterController@listChaptersOfBook');
     Route::put('/chapter', 'ChapterController@update');
+    Route::delete('/chapter/{chapter_id}', 'ChapterController@destroy');
+
 });

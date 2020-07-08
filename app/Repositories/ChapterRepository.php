@@ -56,10 +56,30 @@ class ChapterRepository {
 
     }
 
+    public function delete(int $chapter_id){
+        $this->validateChapter($chapter_id);
+        $chapter = Chapter::find($chapter_id);
+        $this->validateChapterToDelete($chapter);
+        $chapter->delete();
+    }
+
+    private function validateChapterToDelete(Chapter $chapter){
+        if($chapter->book->writer != auth()->user()->actor) {
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'You do not have permission to delete the requested chapter'], 401));
+        }if(!$chapter->book->draft){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The chapter book that you want to delete is not in draft mode'], 401));
+        }
+    }
+
     private function validateChapterToUpdate(Chapter $chapter){
         if($chapter->book->writer != auth()->user()->actor) {
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'You do not have permission to edit the requested chapter'], 401));
+        }if(!$chapter->book->draft){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The chapter book that you want to update is not in draft mode'], 401));
         }
     }
 

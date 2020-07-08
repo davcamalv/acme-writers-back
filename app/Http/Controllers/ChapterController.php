@@ -35,4 +35,10 @@ class ChapterController extends Controller
         return json_encode($this->chapterRepository->update($request->all()));
     }
 
+    public function destroy(int $chapter_id, Request $request)
+    {
+        $request->user()->authorizeRoles(['writer']);
+        $this->bookRepository->delete($chapter_id);
+    }
+
 }
