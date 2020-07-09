@@ -36,8 +36,16 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::delete('/book/remove-from-my-list/{book_id}', 'BookController@removeFromMyList');
 
     Route::post('/chapter/{book_id}', 'ChapterController@store');
+    Route::get('/chapter/show/{chapter_id}', 'ChapterController@show');
     Route::get('/chapter/chapters-of-book/{book_id}', 'ChapterController@listChaptersOfBook');
     Route::put('/chapter', 'ChapterController@update');
     Route::delete('/chapter/{chapter_id}', 'ChapterController@destroy');
+
+    Route::post('/opinion/{book_id}', 'OpinionController@store');
+    Route::get('/opinion/show/{opinion_id}', 'OpinionController@show');
+    Route::get('/opinion/opinions-of-book/{book_id}', 'OpinionController@listOpinionsOfBook');
+    Route::put('/opinion', 'OpinionController@update');
+    Route::delete('/opinion/{opinion_id}', 'OpinionController@destroy');
+
 
 });
