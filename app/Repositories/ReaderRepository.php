@@ -3,10 +3,10 @@
 namespace App\Repositories;
 
 use App\Dtos\RegisterReaderDto;
-use App\Models\Finder;
 use App\Models\User;
 use App\Models\Reader;
 use App\Models\Role;
+use DateTime;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,12 +22,8 @@ class ReaderRepository {
         $user = new User($data);
         $user -> setAttribute('password', bcrypt($data['password']));
         $reader = new Reader();
-        $finder = new Finder();
-        $finder->save();
-        $finder->reader()->save($reader);
         $reader->save();
         $reader->user()->save($user);
-        $user->save();
         $user->roles()->attach(Role::where('name', 'reader')->first());
 
         return new RegisterReaderDto($user->id, $user->name, $user->email, $user->address, $user->phone_number);

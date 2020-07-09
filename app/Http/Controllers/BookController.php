@@ -41,6 +41,18 @@ class BookController extends Controller
         return json_encode($this->bookRepository->changeStatus($request->all()));
     }
 
+    public function addToMyList(int $book_id, Request $request)
+    {
+        $request->user()->authorizeRoles(['reader']);
+        return json_encode($this->bookRepository->addToMyList($book_id));
+    }
+
+    public function removeFromMyList(int $book_id, Request $request)
+    {
+        $request->user()->authorizeRoles(['reader']);
+        $this->bookRepository->removeFromMyList($book_id);
+    }
+
     public function changeDraft(int $book_id)
     {
         return json_encode($this->bookRepository->changeDraft($book_id));

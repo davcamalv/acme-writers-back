@@ -16,7 +16,6 @@ class CreateReadersTable extends Migration
         Schema::create('readers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('finder_id')->constrained();
 
         });
     }

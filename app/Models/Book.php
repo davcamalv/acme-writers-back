@@ -32,11 +32,6 @@ class Book extends Model
         return $this->hasMany('App\Models\Opinion');
     }
 
-    public function finders()
-    {
-        return $this->hasMany('App\Models\Finder');
-    }
-
     public function chapters()
     {
         return $this->hasMany('App\Models\Chapter');
@@ -44,6 +39,6 @@ class Book extends Model
 
     public function readers()
     {
-        return $this->hasMany('App\Models\Reader');
+        return $this->belongsToMany('App\Models\Reader');
     }
 }

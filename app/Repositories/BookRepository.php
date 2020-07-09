@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Dtos\BookDto;
 use App\Models\Book;
 use App\Models\Chapter;
+use App\Models\Reader;
 use App\Models\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
@@ -38,7 +39,7 @@ class BookRepository {
         $publisher = $book->publisher;
         $publisher_id = null;
         if($publisher != null){
-            $publisher_id = $publisher->user()->id;
+            $publisher_id = $publisher->user->id;
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id,
@@ -52,7 +53,7 @@ class BookRepository {
         $publisher = $book->publisher;
         $publisher_id = null;
         if($publisher != null){
-            $publisher_id = $publisher->user()->id;
+            $publisher_id = $publisher->user->id;
 
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
@@ -74,7 +75,7 @@ class BookRepository {
             $publisher = $book->publisher;
             $publisher_id = null;
             if($publisher != null){
-                $publisher_id = $publisher->user()->id;
+                $publisher_id = $publisher->user->id;
 
             }
             $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id);
@@ -102,7 +103,7 @@ class BookRepository {
         $publisher = $book->publisher;
         $publisher_id = null;
         if($publisher != null){
-            $publisher_id = $publisher->user()->id;
+            $publisher_id = $publisher->user->id;
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id,
@@ -119,7 +120,7 @@ class BookRepository {
         $publisher = $book->publisher;
         $publisher_id = null;
         if($publisher != null){
-            $publisher_id = $publisher->user()->id;
+            $publisher_id = $publisher->user->id;
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id,
@@ -147,6 +148,32 @@ class BookRepository {
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
         $publisher_id, $book->writer->user->id);
+    }
+
+    public function addToMyList(int $book_id){
+        $this->validateBook($book_id);
+        $book = Book::find($book_id);
+        $this->validateBookToShow($book);
+        $reader = auth()->user()->actor;
+        $this->validateBookToAddToMyList($reader, $book_id);
+        $book->readers()->save($reader);
+        $publisher = $book->publisher;
+        $publisher_id = null;
+        if($publisher != null){
+            $publisher_id = $publisher->user->id;
+        }
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
+        $publisher_id,
+        $book->writer->user->id);
+    }
+
+    public function removeFromMyList(int $book_id){
+        $this->validateBook($book_id);
+        $book = Book::find($book_id);
+        $this->validateBookToShow($book);
+        $reader = auth()->user()->actor;
+        $this->validateBookToRemoveFromMyList($reader, $book_id);
+        $reader->books()->detach($book->id);
     }
 
     private function validateDataToSave(array $data){
@@ -193,6 +220,20 @@ class BookRepository {
         if (!(Book::where('id', $book_id)->exists())){
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'The book does not exist in the database'], 404));
+        }
+    }
+
+    private function validateBookToRemoveFromMyList(Reader $reader, int $book_id){
+        if (!$reader->books()->find($book_id)){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The book is not on your list'], 400));
+        }
+    }
+
+    private function validateBookToAddToMyList(Reader $reader, int $book_id){
+        if ($reader->books()->find($book_id)){
+            throw new HttpResponseException(response()->json(['success' => false,
+            'message' => 'The book is on your list'], 400));
         }
     }
 
