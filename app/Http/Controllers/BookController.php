@@ -2,84 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
+use App\Repositories\BookRepository;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    protected $bookRepository;
+
+    public function __construct(BookRepository $bookRepo){
+        $this->bookRepository = $bookRepo;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function listMyBooks()
     {
-        //
+        return json_encode($this->bookRepository->listMyBooks());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['writer']);
+        return json_encode($this->bookRepository->save($request->all()));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Book $book)
+    public function show(int $book_id)
     {
-        //
+        return json_encode($this->bookRepository->findOne($book_id));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Book $book)
+    public function update(Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['writer']);
+        return json_encode($this->bookRepository->update($request->all()));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Book $book)
+    public function changeStatus(Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['publisher']);
+        return json_encode($this->bookRepository->changeStatus($request->all()));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Book $book)
+    public function addToMyList(int $book_id, Request $request)
     {
-        //
+        $request->user()->authorizeRoles(['reader']);
+        return json_encode($this->bookRepository->addToMyList($book_id));
+    }
+
+    public function removeFromMyList(int $book_id, Request $request)
+    {
+        $request->user()->authorizeRoles(['reader']);
+        $this->bookRepository->removeFromMyList($book_id);
+    }
+
+    public function changeDraft(int $book_id)
+    {
+        return json_encode($this->bookRepository->changeDraft($book_id));
+    }
+
+    public function destroy(int $book_id, Request $request)
+    {
+        $request->user()->authorizeRoles(['writer']);
+        $this->bookRepository->delete($book_id);
     }
 }

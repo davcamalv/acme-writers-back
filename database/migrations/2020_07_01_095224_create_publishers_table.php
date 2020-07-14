@@ -16,6 +16,9 @@ class CreatePublishersTable extends Migration
         Schema::create('publishers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('VAT');
+            $table->string('comercial_name');
+            $table->foreignId('credit_card_id')->constrained();
         });
     }
 

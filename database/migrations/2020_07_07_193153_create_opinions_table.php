@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFindersTable extends Migration
+class CreateOpinionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,14 @@ class CreateFindersTable extends Migration
      */
     public function up()
     {
-        Schema::create('finders', function (Blueprint $table) {
+        Schema::create('opinions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->boolean('positive');
+            $table->string('review');
+            $table-> date('date');
+            $table->foreignId('reader_id')->constrained();
+            $table->foreignId('book_id')->constrained();
         });
     }
 
@@ -26,6 +31,6 @@ class CreateFindersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('finders');
+        Schema::dropIfExists('opinions');
     }
 }

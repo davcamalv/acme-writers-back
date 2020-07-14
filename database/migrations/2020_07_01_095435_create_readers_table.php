@@ -16,6 +16,7 @@ class CreateReadersTable extends Migration
         Schema::create('readers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+
         });
     }
 

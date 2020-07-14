@@ -6,15 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Writer extends Model
 {
-    protected $table = 'Writer';
+    protected $table = 'writers';
 
     public function creditCard()
     {
-        return $this->hasOne('App\CreditCard');
+        return $this->belongsTo('App\Models\CreditCard');
     }
 
     public function user()
     {
-        return $this->morphOne('App\User', 'actor');
+        return $this->morphOne('App\Models\User', 'actor');
+    }
+
+    public function books()
+    {
+        return $this->hasMany('App\Models\Book');
     }
 }

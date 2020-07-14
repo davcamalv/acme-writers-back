@@ -16,6 +16,17 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('title');
+            $table->string('description');
+            $table->enum('language',['EN', 'ES', 'IT', 'FR', 'DE', 'OTHER']);
+            $table->string('cover')->nullable();
+            $table->enum('status', ['INDEPENDENT', 'PENDING', 'REJECTED', 'ACCEPTED']);
+            $table->boolean('draft');
+            $table->foreignId('ticker_id')->constrained();
+            $table->enum('genre', ['FANTASY', 'ADVENTURE', 'THRILLER', 'ROMANCE', 'MYSTERY'])->nullable();
+            $table->foreignId('publisher_id')->nullable()->constrained();
+            $table->foreignId('writer_id')->constrained();
+
         });
     }
 
