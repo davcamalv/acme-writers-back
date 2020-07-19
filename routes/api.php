@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['cors']], function () {
 
     Route::post('/auth/login', 'TokenController@login');
+    Route::post('/user/is-a-valid-email', 'UserController@isAValidEmail');
+
     Route::get('/auth/refresh', 'TokenController@refreshToken');
     Route::get('/auth/logout', 'TokenController@logout');
     Route::post('/writer', 'WriterController@store');
