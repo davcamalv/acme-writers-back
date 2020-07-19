@@ -8,13 +8,6 @@ class Reader extends Model
 {
     protected $table = 'readers';
 
-
-
-    public function finder()
-    {
-        return $this->belongsTo('App\Models\Finder');
-    }
-
     public function books()
     {
         return $this->belongsToMany('App\Models\Book');
@@ -23,6 +16,11 @@ class Reader extends Model
     public function user()
     {
         return $this->morphOne('App\Models\User', 'actor');
+    }
+
+    public function opinions()
+    {
+        return $this->hasMany('App\Models\Opinion');
     }
 
 }

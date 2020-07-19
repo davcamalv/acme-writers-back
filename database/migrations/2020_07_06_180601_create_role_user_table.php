@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReadersTable extends Migration
+class CreateRoleUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateReadersTable extends Migration
      */
     public function up()
     {
-        Schema::create('readers', function (Blueprint $table) {
-            $table->id();
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedInteger('role_id');
+            $table->unsignedInteger('user_id');
             $table->timestamps();
-
         });
     }
 
@@ -27,6 +28,6 @@ class CreateReadersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('readers');
+        Schema::dropIfExists('role_user');
     }
 }
