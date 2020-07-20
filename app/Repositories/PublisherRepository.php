@@ -9,6 +9,7 @@ use App\Models\Publisher;
 use App\Models\Role;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class PublisherRepository {
 
@@ -33,9 +34,9 @@ class PublisherRepository {
         $publisher->user()->save($user);
         $user->save();
         $user->roles()->attach(Role::where('name', 'publisher')->first());
-
-        return new RegisterPublisherDto($user->id, $user->name, $user->email, $user->address, $user->phone_number, $publisher->VAT, $publisher->comercial_name, $credit_card);
-    }
+        $token = JWTAuth::attempt(array('email'=>$data['email'], 'password' => $data['password']));
+        return response()->json(['token' => $token], 200);
+     }
 
     private function validateDataToSave(array $data){
         $validator = Validator::make($data, ['name'=>'required', 'email' => 'required|email|unique:users,email', 'password' => 'required', 'VAT'=>'required' , 'comercial_name'=>'required' , 'credit_card'=>'required']);

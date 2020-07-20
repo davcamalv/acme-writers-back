@@ -15,6 +15,6 @@ class PublisherController extends Controller
 
     public function store(Request $request)
     {
-        return json_encode($this->publisherRepository->save($request->all()));
+        return $this->publisherRepository->save($request->all());
     }
 }
