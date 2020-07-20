@@ -15,6 +15,6 @@ class WriterController extends Controller
 
     public function store(Request $request)
     {
-        return json_encode($this->writerRepository->save($request->all()));
+        return $this->writerRepository->save($request->all());
     }
 }
