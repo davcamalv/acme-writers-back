@@ -100,7 +100,7 @@ class ChapterRepository {
     }
 
     private function validateDataToSave(array $data){
-        $validator = Validator::make($data, ['title'=>'required', 'number' => 'required|numeric', 'text' => 'required', 'book_id'=> 'required']);
+        $validator = Validator::make($data, ['title'=>'required', 'number' => 'required|numeric', 'text' => 'required', 'book_id'=> 'required|numeric']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,
