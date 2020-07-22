@@ -177,7 +177,7 @@ class BookRepository {
     }
 
     private function validateDataToSave(array $data){
-        $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,ADVENTURE,THRILLER,ROMANCE,MYSTERY']);
+        $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY, TERROR, ADVENTURE, BIOGRAPHICAL, SCIENCE_FICTION, CRIME, ROMANCE, MYSTERY']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,
@@ -195,7 +195,7 @@ class BookRepository {
     }
 
     private function validateDataToUpdate(array $data){
-        $validator = Validator::make($data, ['book_id'=>'required|numeric', 'title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,ADVENTURE,THRILLER,ROMANCE,MYSTERY']);
+        $validator = Validator::make($data, ['book_id'=>'required|numeric', 'title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY, TERROR, ADVENTURE, BIOGRAPHICAL, SCIENCE_FICTION, CRIME, ROMANCE, MYSTERY']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,
