@@ -18,6 +18,11 @@ class BookController extends Controller
         return json_encode($this->bookRepository->listMyBooks());
     }
 
+    public function listNewBooks()
+    {
+        return json_encode($this->bookRepository->listNewBooks());
+    }
+
     public function store(Request $request)
     {
         $request->user()->authorizeRoles(['writer']);
