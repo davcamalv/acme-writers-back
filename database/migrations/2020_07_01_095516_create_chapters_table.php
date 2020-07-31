@@ -18,7 +18,7 @@ class CreateChaptersTable extends Migration
             $table->timestamps();
             $table->string('title');
             $table->integer('number');
-            $table->string('text');
+            $table->longText('text');
             $table->foreignId('book_id')->constrained();
 
         });

@@ -17,7 +17,7 @@ class CreateBooksTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('title');
-            $table->string('description');
+            $table->longText('description');
             $table->enum('language',['EN', 'ES', 'IT', 'FR', 'DE', 'OTHER']);
             $table->string('cover')->nullable();
             $table->enum('status', ['INDEPENDENT', 'PENDING', 'REJECTED', 'ACCEPTED']);
