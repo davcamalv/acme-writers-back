@@ -6,13 +6,14 @@ use DateTime;
 
 final class OpinionDto{
 
-    public function __construct(?int $id, ?bool $positive, ?string $review, ?string $date, ?int $book_id)
+    public function __construct(?int $id, ?bool $positive, ?string $review, ?string $date, ?int $book_id, BasicUserDto $user)
     {
         $this->id = $id;
         $this->positive = $positive;
         $this->review = $review;
         $this->date = $date;
         $this->book_id = $book_id;
+        $this->user = $user;
     }
 
 
@@ -54,5 +55,13 @@ final class OpinionDto{
         public function getBook_id()
         {
                 return $this->book_id;
+        }
+
+        /**
+         * Get the value of user
+         */
+        public function getUser()
+        {
+                return $this->user;
         }
 }
