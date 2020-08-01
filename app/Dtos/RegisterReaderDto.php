@@ -4,11 +4,12 @@ namespace App\Dtos;
 
 final class RegisterReaderDto{
 
-    public function __construct(?int $id_user, ?string $name, ?string $email, ?string $address, ?string $phone_number)
+    public function __construct(?int $id_user, ?string $name, ?string $email, ?string $photo, ?string $address, ?string $phone_number)
     {
         $this->id_user = $id_user;
         $this->name = $name;
         $this->email = $email;
+        $this->photo = $photo;
         $this->address = $address;
         $this->phone_number = $phone_number;
     }
@@ -55,6 +56,14 @@ final class RegisterReaderDto{
     public function getPhone_number()
     {
         return $this->phone_number;
+    }
+
+    /**
+     * Get the value of photo
+     */
+    public function getPhoto()
+    {
+            return $this->photo;
     }
 
 }
