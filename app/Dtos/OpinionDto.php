@@ -6,7 +6,7 @@ use DateTime;
 
 final class OpinionDto{
 
-    public function __construct(?int $id, ?bool $positive, ?string $review, ?DateTime $date, ?int $book_id)
+    public function __construct(?int $id, ?bool $positive, ?string $review, ?string $date, ?int $book_id)
     {
         $this->id = $id;
         $this->positive = $positive;
