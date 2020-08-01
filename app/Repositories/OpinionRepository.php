@@ -110,7 +110,7 @@ class OpinionRepository {
         if (!(Book::where('id', $book_id)->exists())){
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'The book does not exist in the database'], 404));
-        }if(Book::where('id', $book_id)->get()->draft) {
+        }if(Book::where('id', $book_id)->first()->draft) {
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'You do not have permission to access the requested book'], 401));
         }

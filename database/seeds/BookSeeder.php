@@ -123,7 +123,7 @@ class BookSeeder extends Seeder
 
         $ticker = Ticker::all()->skip(10)->first();
         $book = new Book(["title"=>"Harry Potter and the Cursed Child 1",
-        "description"=>"Nineteen years after Harry Potter left Hogwarts School for Magic, the famous wizard is now a hard-working employee of the Ministry for Magic and father to three teenaged children. ... Magic and making friends do not come naturally to him and he finds himself miserable at his new school, Hogwarts.",
+        "description"=>"Nineteen years after Harry Potter left Hogwarts School for Magic, the famous wizard is now a hard-working employee of the Ministry for Magic and father to three teenaged children. Magic and making friends do not come naturally to him and he finds himself miserable at his new school, Hogwarts.",
         "language"=>"EN", "genre"=>"ADVENTURE"]);
         $book->setAttribute('status', 'ACCEPTED');
         $book->setAttribute('publisher_id', Publisher::all()->first()->id);
