@@ -15,6 +15,6 @@ class ReaderController extends Controller
 
     public function store(Request $request)
     {
-        return json_encode($this->readerRepository->save($request->all()));
+        return $this->readerRepository->save($request->all());
     }
 }

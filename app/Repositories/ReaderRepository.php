@@ -9,6 +9,7 @@ use App\Models\Role;
 use DateTime;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ReaderRepository {
 
@@ -26,7 +27,8 @@ class ReaderRepository {
         $reader->user()->save($user);
         $user->roles()->attach(Role::where('name', 'reader')->first());
 
-        return new RegisterReaderDto($user->id, $user->name, $user->email, $user->address, $user->phone_number);
+        $token = JWTAuth::attempt(array('email'=>$data['email'], 'password' => $data['password']));
+        return response()->json(['token' => $token], 200);
     }
 
     private function validateDataToSave(array $data){

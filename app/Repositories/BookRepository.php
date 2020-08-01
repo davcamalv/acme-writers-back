@@ -69,7 +69,7 @@ class BookRepository {
         }elseif($user->hasRole('publisher')){
             $books = Book::where('publisher_id', $user->actor->id)->where('draft', 0)->get();
         }else{
-            $books = Book::where('reader_id', $user->actor->id)->where('draft', 0)->get();
+            $books = Book::where('reader_id', $user->actor->id)->where('draft', 0)->where('status', 'INDEPENDENT')->orWhere('status', 'ACCEPTED')->get();
         }
         foreach($books as $book){
             $publisher = $book->publisher;
@@ -77,6 +77,22 @@ class BookRepository {
             if($publisher != null){
                 $publisher_id = $publisher->user->id;
 
+            }
+            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id);
+            array_push($list_of_books, $book_dto);
+        }
+        return $list_of_books;
+    }
+
+    public function listNewBooks(){
+        $list_of_books = [];
+        $books = Book::orderBy('updated_at', 'DESC')->where('draft', 0)->where('status', 'INDEPENDENT')->orWhere('status', 'ACCEPTED')->take(10)->get();
+
+        foreach($books as $book){
+            $publisher = $book->publisher;
+            $publisher_id = null;
+            if($publisher != null){
+                $publisher_id = $publisher->user->id;
             }
             $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id);
             array_push($list_of_books, $book_dto);
@@ -177,7 +193,7 @@ class BookRepository {
     }
 
     private function validateDataToSave(array $data){
-        $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,ADVENTURE,THRILLER,ROMANCE,MYSTERY']);
+        $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY, TERROR, ADVENTURE, BIOGRAPHICAL, SCIENCE_FICTION, CRIME, ROMANCE, MYSTERY']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,
@@ -195,7 +211,7 @@ class BookRepository {
     }
 
     private function validateDataToUpdate(array $data){
-        $validator = Validator::make($data, ['book_id'=>'required|numeric', 'title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,ADVENTURE,THRILLER,ROMANCE,MYSTERY']);
+        $validator = Validator::make($data, ['book_id'=>'required|numeric', 'title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY, TERROR, ADVENTURE, BIOGRAPHICAL, SCIENCE_FICTION, CRIME, ROMANCE, MYSTERY']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Writer;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class WriterRepository {
 
@@ -33,8 +34,8 @@ class WriterRepository {
         $writer->user()->save($user);
         $user->save();
         $user->roles()->attach(Role::where('name', 'writer')->first());
-
-        return new RegisterWriterDto($user->id, $user->name, $user->email, $user->address, $user->phone_number, $credit_card);
+        $token = JWTAuth::attempt(array('email'=>$data['email'], 'password' => $data['password']));
+        return response()->json(['token' => $token], 200);
     }
 
     private function validateDataToSave(array $data){
