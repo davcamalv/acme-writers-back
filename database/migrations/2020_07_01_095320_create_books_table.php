@@ -23,7 +23,7 @@ class CreateBooksTable extends Migration
             $table->enum('status', ['INDEPENDENT', 'PENDING', 'REJECTED', 'ACCEPTED']);
             $table->boolean('draft');
             $table->foreignId('ticker_id')->constrained();
-            $table->enum('genre', ['FANTASY', 'TERROR', 'ADVENTURE', 'BIOGRAPHICAL', 'SCIENCE_FICTION', 'CRIME', 'ROMANCE', 'MYSTERY'])->nullable();
+            $table->enum('genre', ['FANTASY', 'TERROR', 'ADVENTURE', 'BIOGRAPHICAL', 'SCIENCE FICTION', 'CRIME', 'ROMANCE', 'MYSTERY', 'OTHER'])->nullable();
             $table->foreignId('publisher_id')->nullable()->constrained();
             $table->foreignId('writer_id')->constrained();
 
