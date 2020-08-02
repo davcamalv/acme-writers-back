@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Dtos\BasicUserDto;
 use App\Dtos\OpinionDto;
 use App\Models\Book;
 use App\Models\Opinion;
@@ -18,11 +19,14 @@ class OpinionRepository {
     public function save(array $data){
         $this->validateDataToSave($data);
         $this->validateBook($data['book_id']);
+        $reader = auth()->user()->actor;
         $opinion = new Opinion($data);
         $opinion->setAttribute('date', new DateTime());
+        $opinion->setAttribute('reader_id', $reader->id);
+
         $book = Book::find($data['book_id']);
         $book->opinions()->save($opinion);
-        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $book->id);
+        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $book->id, new BasicUserDto($reader->name, $reader->photo));
     }
 
     public function findOne(int $opinion_id){
@@ -30,7 +34,7 @@ class OpinionRepository {
         $opinion = Opinion::find($opinion_id);
         $book = $opinion->book;
         $this->validateBookToShow($book);
-        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $book->id);
+        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $book->id, new BasicUserDto($opinion->reader->user->name, $opinion->reader->user->photo));
 
     }
 
@@ -41,7 +45,7 @@ class OpinionRepository {
         $list_of_opinions = [];
         $opinions = $book->opinions;
         foreach($opinions as $opinion){
-            $opinion_dto = new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id);
+            $opinion_dto = new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id, new BasicUserDto($opinion->reader->user->name, $opinion->reader->user->photo));
             array_push($list_of_opinions, $opinion_dto);
         }
         return $list_of_opinions;
@@ -54,7 +58,7 @@ class OpinionRepository {
         $this->validateOpinionToUpdate($opinion);
         $opinion->fill(['positive'=>$data['positive'], 'review'=>$data['review']]);
         $opinion->save();
-        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id);
+        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id, new BasicUserDto($opinion->reader->user->name, $opinion->reader->user->photo));
     }
 
     public function delete(int $opinion_id){
@@ -65,14 +69,14 @@ class OpinionRepository {
     }
 
     private function validateOpinionToDelete(Opinion $opinion){
-        if($opinion->book->reader != auth()->user()->actor) {
+        if($opinion->reader != auth()->user()->actor) {
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'You do not have permission to delete the requested opinion'], 401));
         }
     }
 
     private function validateOpinionToUpdate(Opinion $opinion){
-        if($opinion->book->reader != auth()->user()->actor) {
+        if($opinion->reader != auth()->user()->actor) {
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'You do not have permission to edit the requested opinion'], 401));
         }if($opinion->book->draft){
@@ -110,7 +114,7 @@ class OpinionRepository {
         if (!(Book::where('id', $book_id)->exists())){
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'The book does not exist in the database'], 404));
-        }if(Book::where('id', $book_id)->get()->draft) {
+        }if(Book::where('id', $book_id)->first()->draft) {
             throw new HttpResponseException(response()->json(['success' => false,
             'message' => 'You do not have permission to access the requested book'], 401));
         }

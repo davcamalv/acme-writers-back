@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call(TickerSeeder::class);
         $this->call(BookSeeder::class);
         $this->call(ReaderSeeder::class);
+        $this->call(ChapterSeeder::class);
+        $this->call(OpinionSeeder::class);
+
 
 
 

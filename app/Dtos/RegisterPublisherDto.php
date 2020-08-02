@@ -4,11 +4,12 @@ namespace App\Dtos;
 
 final class RegisterPublisherDto{
 
-    public function __construct(?int $id_user, ?string $name, ?string $email, ?string $address, ?string $phone_number, ?string $VAT, ?string $comercial_name, ?CreditCardDto $credit_card)
+    public function __construct(?int $id_user, ?string $name, ?string $email, ?string $photo, ?string $address, ?string $phone_number, ?string $VAT, ?string $comercial_name, ?CreditCardDto $credit_card)
     {
         $this->id_user = $id_user;
         $this->name = $name;
         $this->email = $email;
+        $this->photo = $photo;
         $this->address = $address;
         $this->phone_number = $phone_number;
         $this->VAT = $VAT;
@@ -83,5 +84,13 @@ final class RegisterPublisherDto{
     public function getCredit_card()
     {
             return $this->credit_card;
+    }
+
+    /**
+     * Get the value of photo
+     */
+    public function getPhoto()
+    {
+            return $this->photo;
     }
 }
