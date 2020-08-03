@@ -5,10 +5,11 @@ namespace App\Dtos;
 
 final class BookSimpleDto{
 
-    public function __construct(?int $id, ?string $title)
+    public function __construct(?int $id, ?string $title, ?bool $draft)
     {
         $this->id = $id;
         $this->title = $title;
+        $this->draft = $draft;
 
     }
 
@@ -29,4 +30,12 @@ final class BookSimpleDto{
                 return $this->title;
         }
 
+
+        /**
+         * Get the value of draft
+         */
+        public function getDraft()
+        {
+                return $this->draft;
+        }
 }
