@@ -17,7 +17,7 @@ class CreateOpinionsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->boolean('positive');
-            $table->string('review');
+            $table->longText('review');
             $table-> date('date');
             $table->foreignId('reader_id')->constrained();
             $table->foreignId('book_id')->constrained();

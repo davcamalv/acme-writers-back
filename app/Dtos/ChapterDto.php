@@ -5,7 +5,7 @@ namespace App\Dtos;
 
 final class ChapterDto{
 
-    public function __construct(?int $id, ?string $title, ?string $number, ?string $text, ?string $book_id)
+    public function __construct(?int $id, ?string $title, ?string $number, ?string $text, ?int $book_id)
     {
         $this->id = $id;
         $this->title = $title;

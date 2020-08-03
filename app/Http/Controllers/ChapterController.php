@@ -38,7 +38,7 @@ class ChapterController extends Controller
     public function destroy(int $chapter_id, Request $request)
     {
         $request->user()->authorizeRoles(['writer']);
-        $this->bookRepository->delete($chapter_id);
+        $this->chapterRepository->delete($chapter_id);
     }
 
 }
