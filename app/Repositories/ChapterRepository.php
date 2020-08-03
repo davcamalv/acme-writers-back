@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Dtos\BookSimpleDto;
 use App\Dtos\ChapterDto;
 use App\Models\Book;
 use App\Models\Chapter;
@@ -20,7 +21,7 @@ class ChapterRepository {
         $chapter = new Chapter($data);
         $book = Book::find($data['book_id']);
         $book->chapters()->save($chapter);
-        return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, $book->id);
+        return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, new BookSimpleDto($book->id, $book->title));
     }
 
     public function findOne(int $chapter_id){
@@ -28,7 +29,7 @@ class ChapterRepository {
         $chapter = Chapter::find($chapter_id);
         $book = $chapter->book;
         $this->validateBookToShow($book);
-        return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, $book->id);
+        return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, new BookSimpleDto($book->id, $book->title));
 
     }
 
@@ -39,7 +40,7 @@ class ChapterRepository {
         $list_of_chapters = [];
         $chapters = $book->chapters;
         foreach($chapters as $chapter){
-            $chapter_dto = new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, $chapter->book->id);
+            $chapter_dto = new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, new BookSimpleDto($book->id, $book->title));
             array_push($list_of_chapters, $chapter_dto);
         }
         return $list_of_chapters;
@@ -52,7 +53,7 @@ class ChapterRepository {
         $this->validateChapterToUpdate($chapter);
         $chapter->fill(['title'=>$data['title'], 'text'=>$data['text'], 'number'=>$data['number']]);
         $chapter->save();
-        return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text, $chapter->book->id);
+        return new ChapterDto($chapter->id, $chapter->title, $chapter->number, $chapter->text,new BookSimpleDto($chapter->book->id, $chapter->book->title));
 
     }
 

@@ -5,13 +5,13 @@ namespace App\Dtos;
 
 final class ChapterDto{
 
-    public function __construct(?int $id, ?string $title, ?string $number, ?string $text, ?int $book_id)
+    public function __construct(?int $id, ?string $title, ?string $number, ?string $text, ?BookSimpleDto $book)
     {
         $this->id = $id;
         $this->title = $title;
         $this->number = $number;
         $this->text = $text;
-        $this->book_id = $book_id;
+        $this->book = $book;
     }
 
 
@@ -50,8 +50,8 @@ final class ChapterDto{
         /**
          * Get the value of book_id
          */
-        public function getBook_id()
+        public function getBook()
         {
-                return $this->book_id;
+                return $this->book;
         }
 }
