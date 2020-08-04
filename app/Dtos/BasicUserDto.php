@@ -4,8 +4,9 @@ namespace App\Dtos;
 
 final class BasicUserDto{
 
-    public function __construct(?string $name, ?string $photo)
+    public function __construct(?int $id, ?string $name, ?string $photo)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->photo = $photo;
     }
@@ -26,4 +27,12 @@ final class BasicUserDto{
             return $this->photo;
     }
 
+
+    /**
+     * Get the value of id
+     */
+    public function getId()
+    {
+            return $this->id;
+    }
 }
