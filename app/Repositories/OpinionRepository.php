@@ -34,7 +34,7 @@ class OpinionRepository {
         $opinion = Opinion::find($opinion_id);
         $book = $opinion->book;
         $this->validateBookToShow($book);
-        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $book->id, new BasicUserDto($opinion->reader->id, $opinion->reader->user->name, $opinion->reader->user->photo));
+        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $book->id, new BasicUserDto($opinion->reader->user->id, $opinion->reader->user->name, $opinion->reader->user->photo));
 
     }
 
@@ -45,7 +45,7 @@ class OpinionRepository {
         $list_of_opinions = [];
         $opinions = $book->opinions;
         foreach($opinions as $opinion){
-            $opinion_dto = new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id, new BasicUserDto($opinion->reader->id, $opinion->reader->user->name, $opinion->reader->user->photo));
+            $opinion_dto = new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id, new BasicUserDto($opinion->reader->user->id, $opinion->reader->user->name, $opinion->reader->user->photo));
             array_push($list_of_opinions, $opinion_dto);
         }
         return $list_of_opinions;
@@ -58,7 +58,7 @@ class OpinionRepository {
         $this->validateOpinionToUpdate($opinion);
         $opinion->fill(['positive'=>$data['positive'], 'review'=>$data['review']]);
         $opinion->save();
-        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id, new BasicUserDto($opinion->reader->id, $opinion->reader->user->name, $opinion->reader->user->photo));
+        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id, new BasicUserDto($opinion->reader->user->id, $opinion->reader->user->name, $opinion->reader->user->photo));
     }
 
     public function delete(int $opinion_id){
