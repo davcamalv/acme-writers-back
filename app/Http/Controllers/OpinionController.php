@@ -16,7 +16,7 @@ class OpinionController extends Controller
     public function store(Request $request)
     {
         $request->user()->authorizeRoles(['reader']);
-        return json_encode($this->opinionRepository->save($request->all()));
+        $this->opinionRepository->save($request->all());
     }
 
     public function show(int $opinion_id)
@@ -32,7 +32,7 @@ class OpinionController extends Controller
     public function update(Request $request)
     {
         $request->user()->authorizeRoles(['reader']);
-        return json_encode($this->opinionRepository->update($request->all()));
+        $this->opinionRepository->update($request->all());
     }
 
     public function destroy(int $opinion_id, Request $request)

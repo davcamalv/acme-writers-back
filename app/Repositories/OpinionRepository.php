@@ -26,7 +26,6 @@ class OpinionRepository {
 
         $book = Book::find($data['book_id']);
         $book->opinions()->save($opinion);
-        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $book->id, new BasicUserDto($reader->id, $reader->name, $reader->photo));
     }
 
     public function findOne(int $opinion_id){
@@ -58,7 +57,6 @@ class OpinionRepository {
         $this->validateOpinionToUpdate($opinion);
         $opinion->fill(['positive'=>$data['positive'], 'review'=>$data['review']]);
         $opinion->save();
-        return new OpinionDto($opinion->id, $opinion->positive, $opinion->review, $opinion->date, $opinion->book->id, new BasicUserDto($opinion->reader->user->id, $opinion->reader->user->name, $opinion->reader->user->photo));
     }
 
     public function delete(int $opinion_id){
