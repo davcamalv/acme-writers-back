@@ -69,7 +69,7 @@ class BookRepository {
         }elseif($user->hasRole('publisher')){
             $books = Book::where('publisher_id', $user->actor->id)->where('draft', 0)->get();
         }else{
-            $books = Book::where('reader_id', $user->actor->id)->where('draft', 0)->where('status', 'INDEPENDENT')->orWhere('status', 'ACCEPTED')->get();
+            $books = Reader::find($user->actor->id)->books;
         }
         foreach($books as $book){
             $publisher = $book->publisher;
