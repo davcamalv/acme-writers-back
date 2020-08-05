@@ -5,7 +5,7 @@ namespace App\Dtos;
 
 final class BookDto{
 
-    public function __construct(?int $id, ?string $title, ?string $description, ?string $language, ?string $cover, ?bool $draft, ?string $identifier, ?string $genre, ?int $publisher, ?int $writer, ?array $readers)
+    public function __construct(?int $id, ?string $title, ?string $description, ?string $language, ?string $cover, ?bool $draft, ?string $identifier, ?string $genre, ?int $publisher, ?int $writer, ?array $readers, ?string $status)
     {
         $this->id = $id;
         $this->title = $title;
@@ -18,6 +18,7 @@ final class BookDto{
         $this->publisher = $publisher;
         $this->writer = $writer;
         $this->readers = $readers;
+        $this->status = $status;
     }
 
 
@@ -107,5 +108,13 @@ final class BookDto{
         public function getReaders()
         {
                 return $this->readers;
+        }
+
+        /**
+         * Get the value of status
+         */
+        public function getStatus()
+        {
+                return $this->status;
         }
 }

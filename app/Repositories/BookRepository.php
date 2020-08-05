@@ -45,9 +45,8 @@ class BookRepository {
         foreach($book->readers as $bookReader){
             array_push($readers, $bookReader->user->id);
         }
-        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
-        $publisher_id,
-        $book->writer->user->id, $readers);
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
     }
 
     public function findOne(int $book_id){
@@ -64,9 +63,8 @@ class BookRepository {
         foreach($book->readers as $bookReader){
             array_push($readers, $bookReader->user->id);
         }
-        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
-        $publisher_id,
-        $book->writer->user->id, $readers);
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
     }
 
     public function listMyBooks(){
@@ -90,7 +88,8 @@ class BookRepository {
             foreach($book->readers as $bookReader){
                 array_push($readers, $bookReader->user->id);
             }
-            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers);
+            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+            $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
             array_push($list_of_books, $book_dto);
         }
         return $list_of_books;
@@ -110,7 +109,8 @@ class BookRepository {
             foreach($book->readers as $bookReader){
                 array_push($readers, $bookReader->user->id);
             }
-            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers);
+            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+            $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
             array_push($list_of_books, $book_dto);
         }
         return $list_of_books;
@@ -141,9 +141,8 @@ class BookRepository {
         foreach($book->readers as $bookReader){
             array_push($readers, $bookReader->user->id);
         }
-        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
-        $publisher_id,
-        $book->writer->user->id, $readers);
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
     }
 
     public function changeStatus(array $data){
@@ -162,9 +161,8 @@ class BookRepository {
         foreach($book->readers as $bookReader){
             array_push($readers, $bookReader->user->id);
         }
-        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
-        $publisher_id,
-        $book->writer->user->id, $readers);
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
     }
 
     public function update(array $data){
@@ -190,8 +188,8 @@ class BookRepository {
         foreach($book->readers as $bookReader){
             array_push($readers, $bookReader->user->id);
         }
-        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
-        $publisher_id, $book->writer->user->id, $readers);
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
     }
 
     public function addToMyList(int $book_id){
@@ -210,9 +208,8 @@ class BookRepository {
         foreach($book->readers as $bookReader){
             array_push($readers, $bookReader->user->id);
         }
-        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft, $book->ticker->identifier, $book->genre,
-        $publisher_id,
-        $book->writer->user->id, $readers);
+        return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
     }
 
     public function removeFromMyList(int $book_id){
