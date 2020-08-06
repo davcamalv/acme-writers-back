@@ -5,7 +5,7 @@ namespace App\Dtos;
 
 final class BookDto{
 
-    public function __construct(?int $id, ?string $title, ?string $description, ?string $language, ?string $cover, ?bool $draft, ?string $identifier, ?string $genre, ?int $publisher, ?int $writer, ?array $readers, ?string $status)
+    public function __construct(?int $id, ?string $title, ?string $description, ?string $language, ?string $cover, ?bool $draft, ?string $identifier, ?string $genre, ?int $publisher, ?BasicUserDto $writer, ?array $readers, ?string $status)
     {
         $this->id = $id;
         $this->title = $title;

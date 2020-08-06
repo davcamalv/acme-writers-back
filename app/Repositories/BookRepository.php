@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Dtos\BasicUserDto;
 use App\Dtos\BookDto;
 use App\Models\Book;
 use App\Models\Chapter;
@@ -46,7 +47,7 @@ class BookRepository {
             array_push($readers, $bookReader->user->id);
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
-        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
+        $book->ticker->identifier, $book->genre, $publisher_id, new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
     }
 
     public function findOne(int $book_id){
@@ -64,7 +65,7 @@ class BookRepository {
             array_push($readers, $bookReader->user->id);
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
-        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
+        $book->ticker->identifier, $book->genre, $publisher_id, new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
     }
 
     public function listMyBooks(){
@@ -73,7 +74,7 @@ class BookRepository {
         if($user->hasRole('writer')){
             $books = Book::where('writer_id', $user->actor->id)->get();
         }elseif($user->hasRole('publisher')){
-            $books = Book::where('publisher_id', $user->actor->id)->where('draft', 0)->get();
+            $books = Book::where('publisher_id', $user->actor->id)->where('draft', 0)->where('status', "ACCEPTED")->get();
         }else{
             $books = Reader::find($user->actor->id)->books;
         }
@@ -89,7 +90,29 @@ class BookRepository {
                 array_push($readers, $bookReader->user->id);
             }
             $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
-            $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
+            $book->ticker->identifier, $book->genre, $publisher_id,new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
+            array_push($list_of_books, $book_dto);
+        }
+        return $list_of_books;
+    }
+
+    public function listMyRequests(){
+        $list_of_books = [];
+        $user = User::find(auth()->id());
+        $books = Book::where('publisher_id', $user->actor->id)->where('draft', 0)->where('status', "PENDING")->get();
+
+        foreach($books as $book){
+            $publisher = $book->publisher;
+            $publisher_id = null;
+            if($publisher != null){
+                $publisher_id = $publisher->user->id;
+            }
+            $readers = [];
+            foreach($book->readers as $bookReader){
+                array_push($readers, $bookReader->user->id);
+            }
+            $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
+            $book->ticker->identifier, $book->genre, $publisher_id,new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
             array_push($list_of_books, $book_dto);
         }
         return $list_of_books;
@@ -110,7 +133,7 @@ class BookRepository {
                 array_push($readers, $bookReader->user->id);
             }
             $book_dto = new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
-            $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
+            $book->ticker->identifier, $book->genre, $publisher_id, new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
             array_push($list_of_books, $book_dto);
         }
         return $list_of_books;
@@ -142,7 +165,7 @@ class BookRepository {
             array_push($readers, $bookReader->user->id);
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
-        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
+        $book->ticker->identifier, $book->genre, $publisher_id, new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
     }
 
     public function changeStatus(array $data){
@@ -162,7 +185,7 @@ class BookRepository {
             array_push($readers, $bookReader->user->id);
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
-        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
+        $book->ticker->identifier, $book->genre, $publisher_id, new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
     }
 
     public function update(array $data){
@@ -189,7 +212,7 @@ class BookRepository {
             array_push($readers, $bookReader->user->id);
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
-        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
+        $book->ticker->identifier, $book->genre, $publisher_id, new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
     }
 
     public function addToMyList(int $book_id){
@@ -209,7 +232,7 @@ class BookRepository {
             array_push($readers, $bookReader->user->id);
         }
         return new BookDto($book->id, $book->title, $book->description, $book->language, $book->cover, $book->draft,
-        $book->ticker->identifier, $book->genre, $publisher_id, $book->writer->user->id, $readers, $book->status);
+        $book->ticker->identifier, $book->genre, $publisher_id, new BasicUserDto($book->writer->user->id, $book->writer->user->name, $book->writer->user->photo), $readers, $book->status);
     }
 
     public function removeFromMyList(int $book_id){
