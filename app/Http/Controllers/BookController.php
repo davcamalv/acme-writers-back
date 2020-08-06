@@ -68,4 +68,10 @@ class BookController extends Controller
         $request->user()->authorizeRoles(['writer']);
         $this->bookRepository->delete($book_id);
     }
+
+    public function listMyRequests(Request $request)
+    {
+        $request->user()->authorizeRoles(['publisher']);
+        return json_encode($this->bookRepository->listMyRequests());
+    }
 }
