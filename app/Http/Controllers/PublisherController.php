@@ -17,4 +17,9 @@ class PublisherController extends Controller
     {
         return $this->publisherRepository->save($request->all());
     }
+
+    public function listAllPublishers()
+    {
+        return json_encode($this->publisherRepository->getAll());
+    }
 }

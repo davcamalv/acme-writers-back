@@ -35,6 +35,7 @@ Route::group(['middleware' => ['cors']], function () {
         Route::get('/book/change-draft/{book_id}', 'BookController@changeDraft');
         Route::get('/book/list-my-requests', 'BookController@listMyRequests');
 
+
         Route::post('/book/change-status', 'BookController@changeStatus');
 
         Route::get('/book/add-to-my-list/{book_id}', 'BookController@addToMyList');
@@ -52,6 +53,7 @@ Route::group(['middleware' => ['cors']], function () {
         Route::put('/opinion', 'OpinionController@update');
         Route::delete('/opinion/{opinion_id}', 'OpinionController@destroy');
 
+        Route::get('/publisher/list-all-publishers', 'PublisherController@listAllPublishers');
 
     });
 });

@@ -25,12 +25,14 @@ class BookRepository {
         $this->validateDataToSave($data);
         $ticker = $this->tickerRepository->generateTicker();
         $book = new Book($data);
-        if(array_key_exists('publisher_id', $data)){
+        if($data["publisher_id"] > 0){
             $this->validatePublisher($data['publisher_id']);
             $book->setAttribute('status', 'PENDING');
             $book->setAttribute('publisher_id', User::find($data['publisher_id'])->actor->id);
         }else{
             $book->setAttribute('status', 'INDEPENDENT');
+            $book->setAttribute('publisher_id', null);
+
         }
         $book->setAttribute('draft', true);
         $book->setAttribute('ticker_id', $ticker->id);
@@ -203,7 +205,11 @@ class BookRepository {
         $this->validateBook($data['book_id']);
         $book = Book::find($data['book_id']);
         $this->validateBookToChangeStatus($book);
+
         $book->setAttribute('status', $data["status"]);
+        if($data["status"] == "REJECTED"){
+            $book->setAttribute('draft', 1);
+        }
         $book->save();
         $publisher = $book->publisher;
         $publisher_id = null;
@@ -229,12 +235,14 @@ class BookRepository {
         $this->validateBook($data['book_id']);
         $book = Book::find($data['book_id']);
         $this->validateBookToUpdate($book);
-        if(array_key_exists('publisher_id', $data)){
+        if($data["publisher_id"] > 0){
             $this->validatePublisher($data['publisher_id']);
             $book->setAttribute('status', 'PENDING');
             $book->setAttribute('publisher_id', User::find($data['publisher_id'])->actor->id);
         }else{
             $book->setAttribute('status', 'INDEPENDENT');
+            $book->setAttribute('publisher_id', null);
+
         }
         $book->fill(['title'=>$data['title'], 'description'=>$data['description'], 'language'=>$data['language'], 'cover'=>$data['cover'], 'genre'=>$data['genre']]);
         $book->save();
@@ -293,7 +301,7 @@ class BookRepository {
     }
 
     private function validateDataToSave(array $data){
-        $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,TERROR,ADVENTURE,BIOGRAPHICAL,SCIENCE FICTION,CRIME,ROMANCE,MYSTERY,OTHER']);
+        $validator = Validator::make($data, ['title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'genre' => 'required|in:FANTASY,TERROR,ADVENTURE,BIOGRAPHICAL,SCIENCE FICTION,CRIME,ROMANCE,MYSTERY,OTHER']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,
@@ -311,7 +319,7 @@ class BookRepository {
     }
 
     private function validateDataToUpdate(array $data){
-        $validator = Validator::make($data, ['book_id'=>'required|numeric', 'title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'cover'=> 'url', 'genre' => 'required|in:FANTASY,TERROR,ADVENTURE,BIOGRAPHICAL,SCIENCE FICTION,CRIME,ROMANCE,MYSTERY,OTHER']);
+        $validator = Validator::make($data, ['book_id'=>'required|numeric', 'title'=>'required', 'description' => 'required', 'language' => 'required|in:EN,ES,IT,FR,DE,OTHER', 'genre' => 'required|in:FANTASY,TERROR,ADVENTURE,BIOGRAPHICAL,SCIENCE FICTION,CRIME,ROMANCE,MYSTERY,OTHER']);
 
         if ($validator->fails()) {
             throw new HttpResponseException(response()->json(['success' => false,
