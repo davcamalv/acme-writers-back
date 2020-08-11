@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Libro;
+use App\Chapter;
 use Faker\Generator as Faker;
 
-$factory->define(Libro::class, function (Faker $faker) {
+$factory->define(Chapter::class, function (Faker $faker) {
     return [
         //
     ];
