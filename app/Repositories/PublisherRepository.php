@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Dtos\BasicUserDto;
 use App\Dtos\RegisterPublisherDto;
 use App\Models\CreditCard;
 use App\Models\User;
@@ -36,6 +37,17 @@ class PublisherRepository {
         $user->roles()->attach(Role::where('name', 'publisher')->first());
         $token = JWTAuth::attempt(array('email'=>$data['email'], 'password' => $data['password']));
         return response()->json(['token' => $token], 200);
+     }
+
+    public function getAll(){
+        $list_of_publishers = [];
+        $publishers = Publisher::all();
+
+        foreach($publishers as $publisher){
+            $publisher_dto = new BasicUserDto($publisher->user->id, $publisher->comercial_name, $publisher->user->photo);
+            array_push($list_of_publishers, $publisher_dto);
+        }
+        return $list_of_publishers;
      }
 
     private function validateDataToSave(array $data){

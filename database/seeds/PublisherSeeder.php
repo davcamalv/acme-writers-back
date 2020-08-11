@@ -16,7 +16,7 @@ class PublisherSeeder extends Seeder
     public function run()
     {
         $user = new User(['name' => 'publisher1', 'email' => 'publisher1@gmail.com', 'password' => bcrypt('publisher1'), 'address' => 'address1', 'phone_number' => '654567543']);
-        $publisher = new Publisher(['VAT'=>'VAT1', 'comercial_name' => 'comercial_name1']);
+        $publisher = new Publisher(['VAT'=>'VAT1', 'comercial_name' => 'Bloomsbury Publishing']);
         CreditCard::all()->skip(1)->first()->publisher()->save($publisher);
         $publisher->save();
         $publisher->user()->save($user);
